@@ -45,7 +45,7 @@ FROM bronze_tipado
 CROSS JOIN total_bronze;
 
 COMMENT ON TABLE lakehouse_rotaperfume.silver.pedidos IS
-  'Pedidos tipados a partir de bronze.pedidos. cancelado e valor_liquido resolvem o problema de pedido cancelado com valor_total preenchido sem flag clara na origem.';
+  'Pedidos tipados a partir de bronze.pedidos. A origem ja zera valor_total nos pedidos cancelados mas nao traz nenhuma flag explicita disso -- cancelado e valor_liquido tornam essa regra de negocio visivel e a constraint pedidos_cancelado_valor_zero a garante como contrato, mesmo que a origem mude no futuro.';
 
 COMMENT ON COLUMN lakehouse_rotaperfume.silver.pedidos.data_pedido IS
   'Convertida de dois formatos misturados na origem (ISO e dd/MM/yyyy) via try_to_date -- ANSI mode aborta com to_date/CAST direto sobre o formato errado.';

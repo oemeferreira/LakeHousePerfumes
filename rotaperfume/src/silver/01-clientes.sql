@@ -28,7 +28,7 @@ ranqueado AS (
   SELECT
     *,
     row_number() OVER (
-      PARTITION BY cnpj ORDER BY data_cadastro ASC, cliente_id ASC
+      PARTITION BY cnpj ORDER BY data_cadastro ASC, CAST(cliente_id AS INT) ASC
     ) AS rn,
     collect_list(cliente_id) OVER (PARTITION BY cnpj) AS todos_os_ids_do_cnpj
   FROM bronze_tipado
@@ -54,7 +54,7 @@ CROSS JOIN total_bronze
 WHERE rn = 1;
 
 COMMENT ON TABLE lakehouse_rotaperfume.silver.clientes IS
-  'Clientes limpos e deduplicados a partir de bronze.clientes. CNPJ normalizado para 14 digitos; 40 CNPJs tinham dois cliente_id -- mantido o cadastro mais antigo, o outro rastreavel via cliente_ids_duplicados.';
+  'Clientes limpos e deduplicados a partir de bronze.clientes. CNPJ normalizado para 14 digitos; 40 CNPJs tinham dois cliente_id com a mesma data_cadastro -- o desempate real e o menor cliente_id (comparado como numero), o outro rastreavel via cliente_ids_duplicados.';
 
 COMMENT ON COLUMN lakehouse_rotaperfume.silver.clientes.cnpj IS
   'Normalizado para 14 digitos: trim, remove tudo que nao e digito, lpad com zero a esquerda. Nunca convertido para numero (perderia zeros a esquerda).';
