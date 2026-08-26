@@ -1,9 +1,14 @@
 # Job rotaperfume_pipeline -- cresce a cada prompt da serie "Jornada de Dados":
 #   Prompt 1: raw_conferencia -- confere a chegada dos 10 CSVs no Volume
 #             bronze.raw. NAO cria tabela bronze.
-#   Prompt 2 (este arquivo): + bronze_ingestao -- CSV -> tabelas Delta em
-#             bronze, sem limpeza, so depois de raw_conferencia passar.
-#   Prompt 3: + silver_transformacao -- limpeza e conformidade em silver
+#   Prompt 2: + bronze_ingestao -- CSV -> tabelas Delta em bronze, sem
+#             limpeza, so depois de raw_conferencia passar.
+#   Prompt 3 (este arquivo): + silver_clientes / silver_pedidos /
+#             silver_itens_e_produtos / silver_crm_e_financeiro -- limpeza,
+#             tipagem e contrato (CHECK) em silver. As 4 rodam EM
+#             PARALELO: todas dependem so de bronze_ingestao, nenhuma
+#             depende das outras -- cada .sql le direto da bronze, nunca
+#             da silver de outro arquivo.
 #   Prompt 4: + gold_agregacao       -- metricas de negocio em gold
 #   Prompt 5: + qualidade_dados      -- testes de qualidade dos dados
 #   Prompt 6: + orquestracao final e documentacao (dashboard/Genie)
@@ -24,6 +29,38 @@ resources:
             notebook_path: ../src/bronze/ingestao.py
             base_parameters:
               catalog: ${var.catalog}
+        - task_key: silver_clientes
+          depends_on:
+            - task_key: bronze_ingestao
+          sql_task:
+            file:
+              path: ../src/silver/01-clientes.sql
+              source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
+        - task_key: silver_pedidos
+          depends_on:
+            - task_key: bronze_ingestao
+          sql_task:
+            file:
+              path: ../src/silver/02-pedidos.sql
+              source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
+        - task_key: silver_itens_e_produtos
+          depends_on:
+            - task_key: bronze_ingestao
+          sql_task:
+            file:
+              path: ../src/silver/03-itens-e-produtos.sql
+              source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
+        - task_key: silver_crm_e_financeiro
+          depends_on:
+            - task_key: bronze_ingestao
+          sql_task:
+            file:
+              path: ../src/silver/04-crm-e-financeiro.sql
+              source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
       schedule:
         quartz_cron_expression: "0 0 6 * * ?"
         timezone_id: America/Sao_Paulo
