@@ -1,0 +1,32 @@
+resources:
+  schemas:
+    bronze:
+      name: bronze
+      catalog_name: ${var.catalog}
+      comment: >-
+        Raw ingerido sem transformacao: arquivo como chegou do sistema de
+        origem, guardado byte a byte, para auditoria e reprocessamento.
+    silver:
+      name: silver
+      catalog_name: ${var.catalog}
+      comment: >-
+        Dados limpos e conformados: tipos corrigidos, duplicatas e nulos
+        tratados, prontos para modelagem, ainda no grao original.
+    gold:
+      name: gold
+      catalog_name: ${var.catalog}
+      comment: >-
+        Metricas de negocio agregadas para consumo direto por dashboards
+        e times de analise.
+
+  volumes:
+    raw:
+      name: raw
+      catalog_name: ${var.catalog}
+      # Referencia o recurso (nao a string literal 'bronze') para o deploy
+      # criar o schema bronze antes do volume, garantindo a ordem certa.
+      schema_name: ${resources.schemas.bronze.name}
+      volume_type: MANAGED
+      comment: >-
+        Pouso dos arquivos brutos (CSV) dos sistemas de origem, exatamente
+        como saem do ERP e do CRM, antes de qualquer leitura em tabela.
