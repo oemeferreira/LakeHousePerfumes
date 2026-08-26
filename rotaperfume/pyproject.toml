@@ -32,3 +32,11 @@ packages = ["src"]
 
 [tool.ruff]
 line-length = 120
+
+[tool.pytest.ini_options]
+# Faz 'from raw.conferencia_lib import ...' resolver em tests_unit/ sem
+# __init__.py (namespace package implicito do Python 3). NAO define
+# testpaths de proposito: 'uv run pytest' generico continua pegando tests/
+# (que exige DatabricksSession real, como sempre exigiu); os testes puros
+# so rodam isolados com 'uv run pytest tests_unit/' (ver Step 5).
+pythonpath = ["src"]
