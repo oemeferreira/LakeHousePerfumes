@@ -4,6 +4,8 @@ dist/
 __pycache__/
 *.egg-info
 .venv/
+.pytest_cache/
+.pytest_tmp/
 scratch/**
 !scratch/README.md
 **/explorations/**
