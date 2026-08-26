@@ -4,39 +4,37 @@
       "name": "ds_vendas",
       "displayName": "Vendas (fato_vendas)",
       "queryLines": [
-        "-- Um dataset só, e de propósito: quando os widgets compartilham o dataset,\n",
-        "-- clicar numa marca filtra a tela inteira. Datasets separados quebram isso.\n",
-        "-- Repare no SQL: nenhum CAST, nenhum try_to_date. É o que a silver comprou.\n",
+        "-- Dataset compartilhado com colunas base renomeadas para evitar conflito de nomes com as medidas (MEASURE).\n",
         "SELECT data_pedido, ano, mes, canal, segmento, cidade, uf,\n",
         "       marca, categoria, nota_olfativa,\n",
-        "       pedido_id, cliente_id, quantidade, receita, custo, margem, devolucao\n",
+        "       pedido_id, cliente_id, quantidade, receita AS valor_receita, custo AS valor_custo, margem AS valor_margem, devolucao\n",
         "FROM fato_vendas\n"
       ],
       "columns": [
         {
           "displayName": "Receita",
           "description": "Soma da receita, com devolução (negativa) inclusa.",
-          "expression": "SUM(`receita`)"
+          "expression": "SUM(\u000balor_receita)"
         },
         {
           "displayName": "Margem",
           "description": "Receita menos custo do produto.",
-          "expression": "SUM(`margem`)"
+          "expression": "SUM(\u000balor_margem)"
         },
         {
           "displayName": "Pedidos",
           "description": "Pedidos distintos, não cancelados.",
-          "expression": "COUNT(DISTINCT `pedido_id`)"
+          "expression": "COUNT(DISTINCT pedido_id)"
         },
         {
           "displayName": "Ticket médio",
           "description": "Receita dividida pelo número de pedidos.",
-          "expression": "SUM(`receita`) / NULLIF(COUNT(DISTINCT `pedido_id`), 0)"
+          "expression": "SUM(\u000balor_receita) / NULLIF(COUNT(DISTINCT pedido_id), 0)"
         },
         {
           "displayName": "Margem %",
           "description": "Margem sobre receita.",
-          "expression": "SUM(`margem`) / NULLIF(SUM(`receita`), 0)"
+          "expression": "SUM(\u000balor_margem) / NULLIF(SUM(\u000balor_receita), 0)"
         }
       ]
     },
