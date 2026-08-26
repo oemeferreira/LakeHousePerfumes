@@ -22,11 +22,11 @@ assert os.path.isdir(os.path.join(_SRC_DIR, "raw")), (
     f"para o import cruzado funcionar -- conteudo encontrado: {os.listdir(_SRC_DIR)}"
 )
 
-from raw.conferencia_lib import ARQUIVOS_ESPERADOS, caminho_arquivo
-from bronze.ingestao_lib import nome_tabela, comparar_contagens
-
 # COMMAND ----------
 from pyspark.sql.functions import current_timestamp, lit
+
+from bronze.ingestao_lib import comparar_contagens, nome_tabela
+from raw.conferencia_lib import ARQUIVOS_ESPERADOS, caminho_arquivo
 
 
 def ingerir_tabela(spark, base_dir_raw: str, catalog: str, sistema: str, nome: str) -> int:
@@ -82,7 +82,7 @@ print(f"{'tabela':<16} {'linhas_bronze':>14} {'linhas_controle':>16}  status")
 for nome in sorted(contagens_bronze, key=lambda n: -contagens_bronze[n]):
     esperado = contagens_esperadas.get(nome)
     status = "OK" if esperado == contagens_bronze[nome] else "DIVERGENTE"
-    print(f"{nome:<16} {contagens_bronze[nome]:>14} {str(esperado):>16}  {status}")
+    print(f"{nome:<16} {contagens_bronze[nome]:>14} {esperado!s:>16}  {status}")
 
 if divergencias:
     raise Exception("Divergencia entre bronze e bronze._raw_arquivos:\n" + "\n".join(divergencias))

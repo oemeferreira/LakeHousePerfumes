@@ -32,6 +32,9 @@ packages = ["src"]
 
 [tool.ruff]
 line-length = 120
+# 'spark' e 'dbutils' sao injetados pelo runtime real dos notebooks
+# Databricks -- o ruff nao sabe disso e reporta F821 (nome indefinido).
+builtins = ["spark", "dbutils", "display", "displayHTML"]
 
 [tool.pytest.ini_options]
 # Faz 'from raw.conferencia_lib import ...' resolver em tests_unit/ sem
@@ -40,3 +43,8 @@ line-length = 120
 # (que exige DatabricksSession real, como sempre exigiu); os testes puros
 # so rodam isolados com 'uv run pytest tests_unit/' (ver Step 5).
 pythonpath = ["src"]
+
+[tool.ruff.lint]
+# TRY002 (raise Exception generico) e' um padrao ja estabelecido em
+# raw/conferencia.py -- ignorado deliberadamente, nao e' descuido.
+ignore = ["TRY002"]

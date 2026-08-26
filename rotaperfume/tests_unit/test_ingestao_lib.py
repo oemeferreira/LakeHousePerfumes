@@ -39,15 +39,13 @@ def test_comparar_contagens_detecta_tabela_so_no_controle():
     ]
 
 
-def test_comparar_contagens_reaproveita_lista_de_10_tabelas_de_conferencia_lib():
-    """Prova de que a lista de tabelas nao foi redefinida aqui: usa
-    ARQUIVOS_ESPERADOS do modulo irmao raw.conferencia_lib, nao uma copia
-    local -- se algum dia bronze/ ganhar sua propria lista duplicada, este
-    teste continua passando, mas o import em si so funciona porque
-    pythonpath=["src"] resolve 'raw' como pacote irmao de 'bronze'."""
-    from raw.conferencia_lib import ARQUIVOS_ESPERADOS
+def test_bronze_nao_redefine_a_lista_de_tabelas():
+    """Prova real de que bronze/ingestao_lib.py nao tem sua propria copia de
+    ARQUIVOS_ESPERADOS -- a lista de tabelas so existe em raw.conferencia_lib,
+    evitando que as duas camadas divirjam com o tempo."""
+    import bronze.ingestao_lib as lib
 
-    todos_os_nomes = [nome for nomes in ARQUIVOS_ESPERADOS.values() for nome in nomes]
-    contagens_ok = {nome: 1 for nome in todos_os_nomes}
-    assert comparar_contagens(contagens_ok, contagens_ok) == []
-    assert len(todos_os_nomes) == 10
+    assert not hasattr(lib, "ARQUIVOS_ESPERADOS"), (
+        "bronze/ingestao_lib.py ganhou sua propria lista de tabelas -- "
+        "ela deve vir de raw.conferencia_lib para nao divergir"
+    )
