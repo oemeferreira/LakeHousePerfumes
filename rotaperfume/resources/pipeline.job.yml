@@ -1,7 +1,8 @@
 # Job rotaperfume_pipeline -- cresce a cada prompt da serie "Jornada de Dados":
-#   Prompt 1 (este arquivo): raw_conferencia -- confere a chegada dos 10 CSVs
-#                             no Volume bronze.raw. NAO cria tabela bronze.
-#   Prompt 2: + bronze_ingestao      -- CSV -> tabelas Delta em bronze
+#   Prompt 1: raw_conferencia -- confere a chegada dos 10 CSVs no Volume
+#             bronze.raw. NAO cria tabela bronze.
+#   Prompt 2 (este arquivo): + bronze_ingestao -- CSV -> tabelas Delta em
+#             bronze, sem limpeza, so depois de raw_conferencia passar.
 #   Prompt 3: + silver_transformacao -- limpeza e conformidade em silver
 #   Prompt 4: + gold_agregacao       -- metricas de negocio em gold
 #   Prompt 5: + qualidade_dados      -- testes de qualidade dos dados
@@ -14,6 +15,13 @@ resources:
         - task_key: raw_conferencia
           notebook_task:
             notebook_path: ../src/raw/conferencia.py
+            base_parameters:
+              catalog: ${var.catalog}
+        - task_key: bronze_ingestao
+          depends_on:
+            - task_key: raw_conferencia
+          notebook_task:
+            notebook_path: ../src/bronze/ingestao.py
             base_parameters:
               catalog: ${var.catalog}
       schedule:
