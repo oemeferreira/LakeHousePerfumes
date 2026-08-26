@@ -1,3 +1,4 @@
+Leia .llm/claude.md antes de começar.
 
 Como um Databricks Asset Bundle. Esta é a primeira de seis entregas — as outras
 cinco estendem este mesmo bundle, então deixe a estrutura pronta para crescer.
