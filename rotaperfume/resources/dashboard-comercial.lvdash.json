@@ -14,27 +14,27 @@
         {
           "displayName": "Receita",
           "description": "Soma da receita, com devolução (negativa) inclusa.",
-          "expression": "SUM(\u000balor_receita)"
+          "expression": "SUM(`valor_receita`)"
         },
         {
           "displayName": "Margem",
           "description": "Receita menos custo do produto.",
-          "expression": "SUM(\u000balor_margem)"
+          "expression": "SUM(`valor_margem`)"
         },
         {
           "displayName": "Pedidos",
           "description": "Pedidos distintos, não cancelados.",
-          "expression": "COUNT(DISTINCT pedido_id)"
+          "expression": "COUNT(DISTINCT `pedido_id`)"
         },
         {
           "displayName": "Ticket médio",
           "description": "Receita dividida pelo número de pedidos.",
-          "expression": "SUM(\u000balor_receita) / NULLIF(COUNT(DISTINCT pedido_id), 0)"
+          "expression": "SUM(`valor_receita`) / NULLIF(COUNT(DISTINCT `pedido_id`), 0)"
         },
         {
           "displayName": "Margem %",
           "description": "Margem sobre receita.",
-          "expression": "SUM(\u000balor_margem) / NULLIF(SUM(\u000balor_receita), 0)"
+          "expression": "SUM(`valor_margem`) / NULLIF(SUM(`valor_receita`), 0)"
         }
       ]
     },
