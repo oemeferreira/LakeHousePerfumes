@@ -111,6 +111,28 @@ resources:
               path: ../src/gold/10-auditoria-metadado.sql
               source: WORKSPACE
             warehouse_id: ${var.warehouse_id}
+        - task_key: ml_features
+          depends_on:
+            - task_key: testes
+          notebook_task:
+            notebook_path: ../src/ml/11-features.py
+            base_parameters:
+              catalog: ${var.catalog}
+        - task_key: ml_modelo
+          depends_on:
+            - task_key: ml_features
+          notebook_task:
+            notebook_path: ../src/ml/12-modelo.py
+            base_parameters:
+              catalog: ${var.catalog}
+        - task_key: ml_fila
+          depends_on:
+            - task_key: ml_modelo
+          sql_task:
+            file:
+              path: ../src/ml/13-fila.sql
+              source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
       schedule:
         quartz_cron_expression: "0 0 6 * * ?"
         timezone_id: America/Sao_Paulo

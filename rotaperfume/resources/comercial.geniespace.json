@@ -173,6 +173,36 @@
         ]
       },
       {
+        "identifier": "lakehouse_rotaperfume.gold.fila_semanal",
+        "column_configs": [
+          {
+            "column_name": "cidade",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "faixa",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "motivo",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "razao_social",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "vendedor",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          }
+        ]
+      },
+      {
         "identifier": "lakehouse_rotaperfume.gold.margem_por_categoria",
         "column_configs": [
           {
@@ -200,6 +230,16 @@
         "column_configs": [
           {
             "column_name": "marca",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          }
+        ]
+      },
+      {
+        "identifier": "lakehouse_rotaperfume.gold.score_propensao",
+        "column_configs": [
+          {
+            "column_name": "faixa",
             "enable_format_assistance": true,
             "enable_entity_matching": true
           }
@@ -302,7 +342,14 @@
           "* ruptura_por_marca     — quais marcas mais faltam no estoque\n",
           "\n",
           "Use gold.fato_vendas quando a pergunta cruzar dimensões que as views não têm.\n",
-          "NUNCA use as tabelas do schema bronze: elas são texto puro e sujas de propósito.\n"
+          "NUNCA use as tabelas do schema bronze: elas são texto puro e sujas de propósito.\n",
+          "\n",
+          "## Fila Semanal e Inteligência de Vendas (Machine Learning)\n",
+          "\n",
+          "* fila_semanal    — os 200 clientes mais propensos da base inteira, com motivo da ligação e sugestão de produto.\n",
+          "* score_propensao — escoragem de propensão de compra de todos os clientes.\n",
+          "\n",
+          "Use sempre as tabelas e funções deste espaço. Nunca invente número, nome de cliente ou quantidade de estoque.\n"
         ],
         "id": "762d5c05f31695bb9c5e1b1f4dfec7c9"
       }

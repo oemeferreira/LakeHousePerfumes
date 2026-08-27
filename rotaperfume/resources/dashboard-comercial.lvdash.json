@@ -52,6 +52,16 @@
         "ORDER BY receita DESC\n",
         "LIMIT 20\n"
       ]
+    },
+    {
+      "name": "ds_fila_semanal",
+      "displayName": "Fila Semanal (gold.fila_semanal)",
+      "queryLines": [
+        "-- Fila semanal com os 200 contatos priorizados pelo modelo de ML.\n",
+        "SELECT vendedor, ordem, cliente_id, razao_social, cidade, uf,\n",
+        "       score, faixa, ticket_medio, motivo, sugestao\n",
+        "FROM fila_semanal\n"
+      ]
     }
   ],
   "pages": [
@@ -736,6 +746,186 @@
             "y": 19,
             "width": 8,
             "height": 6
+          }
+        }
+      ]
+    },
+    {
+      "name": "fila_semanal",
+      "displayName": "Fila da semana",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "name": "titulo_fila",
+            "textbox_spec": "# Fila da Semana · Priorização de Ligações\n"
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "subtitulo_fila",
+            "textbox_spec": "Lista dos 200 clientes com maior propensão de compra na semana, distribuída por vendedor ativo com motivos dinâmicos e sugestão de reposição.\n"
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "f_vendedor",
+            "queries": [
+              {
+                "name": "q_vendedor",
+                "query": {
+                  "datasetName": "ds_fila_semanal",
+                  "fields": [
+                    {
+                      "name": "vendedor",
+                      "expression": "`vendedor`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "vendedor",
+                    "displayName": "Vendedor",
+                    "queryName": "q_vendedor"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Filtrar por Vendedor"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 4,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "tabela_fila",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_fila_semanal",
+                  "fields": [
+                    {
+                      "name": "ordem",
+                      "expression": "`ordem`"
+                    },
+                    {
+                      "name": "razao_social",
+                      "expression": "`razao_social`"
+                    },
+                    {
+                      "name": "cidade",
+                      "expression": "`cidade`"
+                    },
+                    {
+                      "name": "score",
+                      "expression": "`score`"
+                    },
+                    {
+                      "name": "faixa",
+                      "expression": "`faixa`"
+                    },
+                    {
+                      "name": "motivo",
+                      "expression": "`motivo`"
+                    },
+                    {
+                      "name": "sugestao",
+                      "expression": "`sugestao`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "ordem",
+                    "displayName": "Ordem",
+                    "type": "integer",
+                    "order": 0
+                  },
+                  {
+                    "fieldName": "razao_social",
+                    "displayName": "Cliente",
+                    "type": "string",
+                    "order": 1
+                  },
+                  {
+                    "fieldName": "cidade",
+                    "displayName": "Cidade",
+                    "type": "string",
+                    "order": 2
+                  },
+                  {
+                    "fieldName": "score",
+                    "displayName": "Nota (Score)",
+                    "type": "float",
+                    "order": 3,
+                    "numberFormat": "0.0%"
+                  },
+                  {
+                    "fieldName": "faixa",
+                    "displayName": "Faixa",
+                    "type": "string",
+                    "order": 4
+                  },
+                  {
+                    "fieldName": "motivo",
+                    "displayName": "Motivo da Ligação",
+                    "type": "string",
+                    "order": 5
+                  },
+                  {
+                    "fieldName": "sugestao",
+                    "displayName": "Sugestão de Oferta (com Estoque)",
+                    "type": "string",
+                    "order": 6
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Fila Semanal Priorizada"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 12,
+            "height": 12
           }
         }
       ]
