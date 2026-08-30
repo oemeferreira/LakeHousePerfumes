@@ -1,0 +1,17 @@
+# Genie Space da DIRECAO — segundo space do projeto, como codigo no bundle.
+#
+# Nao altere o genie_comercial (resources/genie.genie_space.yml): a chave dele
+# nao pode mudar, ou o redeploy recria o space e perde as conversas.
+#
+# Este space serve a direcao comercial, que nao escreve SQL e decide ligacao.
+# As fontes sao as sete tabelas de decisao — e o retorno_ligacao, que comeca
+# vazio e e preenchido pelo app da noite 4.
+resources:
+  genie_spaces:
+    genie_direcao:
+      title: Rota do Perfume · Direção
+      description: >-
+        O assunto da semana: a fila dos 200 contatos, o modelo que a gerou,
+        o que a ligacao retornou. Para a direcao comercial decidir e cobrar.
+      file_path: ./direcao.geniespace.json
+      warehouse_id: ${var.warehouse_id}
